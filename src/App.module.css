@@ -1,0 +1,24 @@
+.App {
+  text-align: center;
+}
+
+body {
+  background-color: #d2d7d7;
+}
+
+.Container {
+  background-color: white;
+  border: 1px solid grey;
+  margin: 3vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5vh;
+}
+
+.Required::after {
+  content: '✱';
+  color: red;
+}
+
