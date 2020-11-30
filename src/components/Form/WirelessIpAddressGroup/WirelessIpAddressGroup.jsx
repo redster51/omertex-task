@@ -1,6 +1,6 @@
 import IpAddressGroup from "../IpAddressGroup";
 import {useFormContext} from "../FormContext";
-import React from "react";
+import React, {useMemo} from "react";
 
 const WirelessIpAddressGroup = () => {
     const {
@@ -10,10 +10,23 @@ const WirelessIpAddressGroup = () => {
             handleWirelessIpChange,
             handleWirelessSubnetMaskChange
         },
-        state: {wirelessSettings}
+        state: {
+            wirelessSettings,
+            formState: {
+                wirelessIpAddressField,
+                wirelessSubnetMaskField
+            }
+        }
     } = useFormContext();
+    const formState = useMemo(() => ({
+            ipAddressField: wirelessIpAddressField,
+            subnetMaskField: wirelessSubnetMaskField
+        }),
+        [wirelessIpAddressField, wirelessSubnetMaskField]);
+
     return (
         <IpAddressGroup settings={wirelessSettings}
+                        formState={formState}
                         isWirelessGroup
                         handleIpChange={handleWirelessIpChange}
                         handleIpAddressChange={handleWirelessIpAddressChange}

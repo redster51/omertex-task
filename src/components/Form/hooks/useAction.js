@@ -10,7 +10,7 @@ import {
     SET_WIFI_SECURITY_ENABLED,
     SET_WIFI_SECURITY_KEY, SET_WIRELESS_ALTERNATIVE_DNS_SERVER, SET_WIRELESS_AUTO_DNS,
     SET_WIRELESS_AUTO_IP, SET_WIRELESS_DEFAULT_GATEWAY, SET_WIRELESS_IP_ADDRESS,
-    SET_WIRELESS_NETWORK_NAME, SET_WIRELESS_PREFERRED_DNS_SERVER, SET_WIRELESS_SUBNET_MASK
+    SET_WIRELESS_NETWORK_NAME, SET_WIRELESS_PREFERRED_DNS_SERVER, SET_WIRELESS_SUBNET_MASK, VALIDATE_FORM
 } from "../actions";
 import {useCallback} from "react";
 
@@ -70,6 +70,9 @@ export const useActions = (dispatch) => {
     const handleWirelessAlternativeDnsServerChange = useCallback(({target: {value}}) => {
         dispatch({type: SET_WIRELESS_ALTERNATIVE_DNS_SERVER, value: value});
     }, []);
+    const validateForm = useCallback(()=> {
+        dispatch({type: VALIDATE_FORM});
+    }, []);
 
     return {
         handleAlternativeDnsServerChange,
@@ -89,6 +92,7 @@ export const useActions = (dispatch) => {
         handleWifiNetworkNameChange,
         handleWifiEnabledChange,
         handleWirelessSecurityEnabledChange,
-        handleWirelessIpChange
+        handleWirelessIpChange,
+        validateForm
     };
 }

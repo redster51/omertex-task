@@ -1,5 +1,5 @@
 import {useFormContext} from "../FormContext";
-import React from "react";
+import React, {useMemo} from "react";
 import DnsServerGroup from "../DnsServerGroup";
 
 const EthernetDnsServerGroup = () => {
@@ -9,14 +9,26 @@ const EthernetDnsServerGroup = () => {
             handlePreferredDnsServerChange,
             handleAlternativeDnsServerChange
         },
-        state: {ethernetSettings}
+        state: {
+            ethernetSettings,
+            formState: {
+                ethernetPreferredDnsServerField,
+                ethernetAlternativeDnsServerField
+            }
+        }
     } = useFormContext();
+    const formState = useMemo(() => ({
+        preferredDnsServerField: ethernetPreferredDnsServerField,
+        alternativeDnsServerField: ethernetAlternativeDnsServerField
+    }), [ethernetAlternativeDnsServerField, ethernetPreferredDnsServerField])
 
     return (
         <DnsServerGroup settings={ethernetSettings}
                         handleDnsServerChange={handleDnsServerChange}
                         handlePreferredDnsServerChange={handlePreferredDnsServerChange}
-                        handleAlternativeDnsServerChange={handleAlternativeDnsServerChange}/>
+                        handleAlternativeDnsServerChange={handleAlternativeDnsServerChange}
+                        formState={formState}
+        />
     )
 }
 

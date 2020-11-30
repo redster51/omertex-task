@@ -9,15 +9,19 @@ import WirelessIpAddressGroup from "./WirelessIpAddressGroup";
 import EthernetIpAddressGroup from "./EthernetIpAddressGroup";
 import EthernetDnsServerGroup from "./EthernetDnsServerGroup";
 import WirelessDnsServerGroup from "./WirelessDnsServerGroup";
+import useFormValidation from "./hooks/useFormValidation";
 
 const Form = ({className}) => {
     const [state, dispatch] = useReducer(formReducer, initialState);
     const actions = useActions(dispatch);
+    const isValidForm =  useFormValidation(state.formState);
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.group('Data for backend:', state);
-        alert('Form successfully submitted');
+        actions.validateForm();
+        if (isValidForm) {
+            console.group('Data for backend:', state);
+        }
     }
 
     return (
@@ -44,7 +48,10 @@ const Form = ({className}) => {
                     <Grid item container spacing={2} alignItems={'center'} direction={'row'}
                           justify={'flex-start'}>
                         <Grid item>
-                            <StyledButton type="submit" variant={'contained'} color={'primary'}>Save</StyledButton>
+                            <StyledButton type="submit"
+                                          variant={'contained'}
+                                          disabled={isValidForm}
+                                          color={'primary'}>Save</StyledButton>
                         </Grid>
                         <Grid item>
                             <StyledButton variant={'outlined'} color={'primary'}>Cancel</StyledButton>

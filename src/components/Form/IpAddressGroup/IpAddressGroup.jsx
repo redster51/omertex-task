@@ -4,8 +4,6 @@ import {FormControlLabel} from "@material-ui/core";
 import StyledRadio from "../../StyledRadio";
 import StyledTextField from "../../StyledTextField";
 import React from "react";
-import {IP_VALIDATION_REG_EXP, SUBNET_MASK_VALIDATION_REG_EXP} from "../../../constants";
-import useValidation from "../hooks/useValidation";
 import styles from '../../../App.module.css';
 
 const IpAddressGroup = ({
@@ -14,11 +12,10 @@ const IpAddressGroup = ({
                             handleIpChange,
                             handleIpAddressChange,
                             handleSubnetMaskChange,
-                            handleDefaultGatewayChange
+                            handleDefaultGatewayChange,
+                            formState
                         }) => {
     const required = !settings.isAutoIpEnabled ? styles.Required : null;
-    const [hasIpAddressError, onIpAddressBlur] = useValidation(settings.ipAddressGroup.ipAddress, IP_VALIDATION_REG_EXP);
-    const [hasSubnetMaskError, onSubnetMaskBlur] = useValidation(settings.ipAddressGroup.subnetMask, SUBNET_MASK_VALIDATION_REG_EXP);
 
     return <Grid item>
         <Grid container direction={'column'} justify={'flex-start'} alignItems={'flex-start'}>
@@ -37,10 +34,8 @@ const IpAddressGroup = ({
                 <span className={required}>IP address:</span>
                 <StyledTextField variant={'outlined'}
                                  disabled={settings.isAutoIpEnabled}
-                                 error={hasIpAddressError}
-                                 onBlur={onIpAddressBlur}
-                                 helperText={hasIpAddressError && 'Invalid IP Address'}
-                                 required
+                                 error={!!formState.ipAddressField}
+                                 helperText={formState.ipAddressField}
                                  value={settings.ipAddressGroup.ipAddress}
                                  onChange={handleIpAddressChange}
                 />
@@ -48,18 +43,16 @@ const IpAddressGroup = ({
             <Grid item container justify={'flex-end'} alignItems={'center'}>
                 <span className={required}>Subnet Mask:</span>
                 <StyledTextField variant={'outlined'}
-                                 disabled={settings.isAutoIpEnabled}
-                                 required
-                                 error={hasSubnetMaskError}
-                                 onBlur={onSubnetMaskBlur}
-                                 helperText={hasSubnetMaskError && 'Invalid Subnet Mask'}
+                                 disabled={!!settings.isAutoIpEnabled}
+                                 error={!!formState.subnetMaskField}
+                                 helperText={formState.subnetMaskField}
                                  value={settings.ipAddressGroup.subnetMask}
                                  onChange={handleSubnetMaskChange}/>
             </Grid>
             <Grid item container justify={'flex-end'} alignItems={'center'}>
                 Default Gateway:
                 <StyledTextField variant={'outlined'}
-                                 disabled={settings.isAutoIpEnabled}
+                                 disabled={!!settings.isAutoIpEnabled}
                                  value={settings.ipAddressGroup.defaultGateway}
                                  onChange={handleDefaultGatewayChange}/>
             </Grid>

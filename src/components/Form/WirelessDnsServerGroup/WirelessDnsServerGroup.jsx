@@ -1,5 +1,5 @@
 import {useFormContext} from "../FormContext";
-import React from "react";
+import React, {useMemo} from "react";
 import DnsServerGroup from "../DnsServerGroup";
 
 const WirelessDnsServerGroup = () => {
@@ -9,15 +9,27 @@ const WirelessDnsServerGroup = () => {
             handleWirelessPreferredDnsServerChange,
             handleWirelessAlternativeDnsServerChange
         },
-        state: {wirelessSettings}
+        state: {
+            wirelessSettings,
+            formState: {
+                wirelessPreferredDnsServerField,
+                wirelessAlternativeDnsServerField
+            }
+        }
     } = useFormContext();
+    const formState = useMemo(() => ({
+        preferredDnsServerField: wirelessPreferredDnsServerField,
+        alternativeDnsServerField: wirelessAlternativeDnsServerField
+    }), [wirelessPreferredDnsServerField, wirelessAlternativeDnsServerField]);
 
     return (
         <DnsServerGroup settings={wirelessSettings}
                         isWirelessGroup
                         handleDnsServerChange={handleWirelessDnsServerChange}
                         handlePreferredDnsServerChange={handleWirelessPreferredDnsServerChange}
-                        handleAlternativeDnsServerChange={handleWirelessAlternativeDnsServerChange}/>
+                        handleAlternativeDnsServerChange={handleWirelessAlternativeDnsServerChange}
+                        formState={formState}
+        />
     )
 }
 

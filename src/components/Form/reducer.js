@@ -10,8 +10,9 @@ import {
     SET_WIFI_SECURITY_ENABLED,
     SET_WIFI_SECURITY_KEY, SET_WIRELESS_ALTERNATIVE_DNS_SERVER, SET_WIRELESS_AUTO_DNS,
     SET_WIRELESS_AUTO_IP, SET_WIRELESS_DEFAULT_GATEWAY, SET_WIRELESS_IP_ADDRESS,
-    SET_WIRELESS_NETWORK_NAME, SET_WIRELESS_PREFERRED_DNS_SERVER, SET_WIRELESS_SUBNET_MASK
+    SET_WIRELESS_NETWORK_NAME, SET_WIRELESS_PREFERRED_DNS_SERVER, SET_WIRELESS_SUBNET_MASK, VALIDATE_FORM
 } from "./actions";
+import {validateField} from "./validateField";
 
 const ipAddressGroup = {
     ipAddress: '',
@@ -45,9 +46,21 @@ const ethernetSettings = {
     dnsServerGroup
 }
 
+const formState = {
+    ethernetIpAddressField: '',
+    ethernetSubnetMaskField: '',
+    wirelessIpAddressField: '',
+    wirelessSubnetMaskField: '',
+    ethernetPreferredDnsServerField: '',
+    ethernetAlternativeDnsServerField: '',
+    wirelessPreferredDnsServerField: '',
+    wirelessAlternativeDnsServerField: ''
+}
+
 export const initialState = {
     ethernetSettings,
-    wirelessSettings
+    wirelessSettings,
+    formState
 }
 
 export const formReducer = (state, {type, payload}) => {
@@ -79,6 +92,10 @@ export const formReducer = (state, {type, payload}) => {
         case SET_IP_ADDRESS:
             return {
                 ...state,
+                formState: {
+                    ...state.formState,
+                    ethernetIpAddressField: validateField('ethernetIpAddressField', payload)
+                },
                 ethernetSettings: {
                     ...state.ethernetSettings,
                     ipAddressGroup: {
@@ -90,6 +107,10 @@ export const formReducer = (state, {type, payload}) => {
         case SET_SUBNET_MASK:
             return {
                 ...state,
+                formState: {
+                    ...state.formState,
+                    ethernetSubnetMaskField: validateField('ethernetSubnetMaskField', payload)
+                },
                 ethernetSettings: {
                     ...state.ethernetSettings,
                     ipAddressGroup: {
@@ -133,6 +154,10 @@ export const formReducer = (state, {type, payload}) => {
         case SET_PREFERRED_DNS_SERVER:
             return {
                 ...state,
+                formState: {
+                    ...state.formState,
+                    ethernetPreferredDnsServerField: validateField('ethernetPreferredDnsServerField', payload)
+                },
                 ethernetSettings: {
                     ...state.ethernetSettings,
                     dnsServerGroup: {
@@ -144,6 +169,10 @@ export const formReducer = (state, {type, payload}) => {
         case SET_ALTERNATIVE_DNS_SERVER:
             return {
                 ...state,
+                formState: {
+                    ...state.formState,
+                    ethernetAlternativeDnsServerField: validateField('ethernetAlternativeDnsServerField', payload)
+                },
                 ethernetSettings: {
                     ...state.ethernetSettings,
                     dnsServerGroup: {
@@ -232,6 +261,10 @@ export const formReducer = (state, {type, payload}) => {
         SET_WIRELESS_IP_ADDRESS:
             return {
                 ...state,
+                formState: {
+                    ...state.formState,
+                    wirelessIpAddressField: validateField('wirelessIpAddressField', payload)
+                },
                 wirelessSettings: {
                     ...state.wirelessSettings,
                     ipAddressGroup: {
@@ -244,6 +277,10 @@ export const formReducer = (state, {type, payload}) => {
         SET_WIRELESS_SUBNET_MASK:
             return {
                 ...state,
+                formState: {
+                    ...state.formState,
+                    wirelessSubnetMaskField: validateField('wirelessSubnetMaskField', payload)
+                },
                 wirelessSettings: {
                     ...state.wirelessSettings,
                     ipAddressGroup: {
@@ -290,6 +327,9 @@ export const formReducer = (state, {type, payload}) => {
         SET_WIRELESS_PREFERRED_DNS_SERVER:
             return {
                 ...state,
+                formState: {
+                    wirelessPreferredDnsServerField: validateField('wirelessPreferredDnsServerField', payload)
+                },
                 wirelessSettings: {
                     ...state.wirelessSettings,
                     dnsServerGroup: {
@@ -302,12 +342,33 @@ export const formReducer = (state, {type, payload}) => {
         SET_WIRELESS_ALTERNATIVE_DNS_SERVER:
             return {
                 ...state,
+                formState: {
+                    wirelessAlternativeDnsServerField: validateField('wirelessAlternativeDnsServerField', payload)
+                },
                 wirelessSettings: {
                     ...state.wirelessSettings,
                     dnsServerGroup: {
                         ...state.wirelessSettings.dnsServerGroup,
                         alternativeDnsServer: payload
                     }
+                }
+            }
+        case VALIDATE_FORM:
+            return {
+                ...state,
+                formState: {
+                    ethernetIpAddressField: !state.ethernetSettings.isAutoIpEnabled && validateField('ethernetIpAddressField', state.ethernetSettings.ipAddressGroup.ipAddress),
+                    ethernetSubnetMaskField: !state.ethernetSettings.isAutoIpEnabled && validateField('ethernetSubnetMaskField', state.ethernetSettings.ipAddressGroup.subnetMask),
+                    wirelessIpAddressField: !state.wirelessSettings.isAutoIpEnabled && validateField('wirelessIpAddressField', state.wirelessSettings.ipAddressGroup.ipAddress),
+                    wirelessSubnetMaskField: !state.wirelessSettings.isAutoIpEnabled && validateField('wirelessSubnetMaskField', state.wirelessSettings.ipAddressGroup.subnetMask),
+                    ethernetPreferredDnsServerField: !state.ethernetSettings.isAutoDnsEnabled && validateField('ethernetPreferredDnsServerField', state.ethernetSettings.dnsServerGroup.preferredDnsServer),
+                    ethernetAlternativeDnsServerField: !state.ethernetSettings.isAutoDnsEnabled
+                        && state.formState.ethernetAlternativeDnsServerField !== ''
+                        && validateField('ethernetAlternativeDnsServerField', state.ethernetSettings.dnsServerGroup.alternativeDnsServer),
+                    wirelessPreferredDnsServerField: !state.wirelessSettings.isAutoDnsEnabled && validateField('wirelessPreferredDnsServerField', state.wirelessSettings.dnsServerGroup.preferredDnsServer),
+                    wirelessAlternativeDnsServerField: !state.wirelessSettings.isAutoDnsEnabled
+                        && state.formState.wirelessAlternativeDnsServerField !== ''
+                        && validateField('wirelessAlternativeDnsServerField', state.wirelessSettings.dnsServerGroup.alternativeDnsServer)
                 }
             }
         default:

@@ -1,6 +1,6 @@
 import IpAddressGroup from "../IpAddressGroup";
 import {useFormContext} from "../FormContext";
-import React from "react";
+import React, {useMemo} from "react";
 
 const EthernetIpAddressGroup = () => {
     const {
@@ -10,10 +10,17 @@ const EthernetIpAddressGroup = () => {
             handleIpChange,
             handleSubnetMaskChange
         },
-        state: {ethernetSettings}
+        state: {ethernetSettings, formState: {ethernetIpAddressField, ethernetSubnetMaskField}}
     } = useFormContext();
+    const formState = useMemo(() => ({
+            ipAddressField: ethernetIpAddressField,
+            subnetMaskField: ethernetSubnetMaskField
+        }),
+        [ethernetIpAddressField, ethernetSubnetMaskField]);
+
     return (
         <IpAddressGroup settings={ethernetSettings}
+                        formState={formState}
                         handleIpChange={handleIpChange}
                         handleIpAddressChange={handleIpAddressChange}
                         handleSubnetMaskChange={handleSubnetMaskChange}

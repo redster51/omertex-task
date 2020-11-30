@@ -5,17 +5,15 @@ import StyledRadio from "../../StyledRadio";
 import StyledTextField from "../../StyledTextField";
 import React from "react";
 import styles from "../../../App.module.css";
-import useValidation from "../hooks/useValidation";
-import {DOMAIN_REG_EXP} from "../../../constants";
 
 const DnsServerGroup = ({
                             isWirelessGroup,
                             settings,
                             handleDnsServerChange,
                             handlePreferredDnsServerChange,
-                            handleAlternativeDnsServerChange
+                            handleAlternativeDnsServerChange,
+                            formState
                         }) => {
-    const [hasPreferredDns, setPreferredDnsErrorState] = useValidation(settings.dnsServerGroup.preferredDnsServer, DOMAIN_REG_EXP);
     const required = !settings.isAutoDnsEnabled ? styles.Required : null;
 
     return <Grid item>
@@ -34,19 +32,21 @@ const DnsServerGroup = ({
               spacing={2}>
             <Grid item container justify={'flex-end'} alignItems={'center'}>
                 <span className={required}>Preferred DNS Server:</span>
-                <StyledTextField variant={'outlined'} required
-                                 error={hasPreferredDns}
-                                 helperText={hasPreferredDns && 'Incorrect Preferred DNS Server'}
-                                 onBlur={setPreferredDnsErrorState}
-                                 disabled={settings.isAutoDnsEnabled}
+                <StyledTextField variant={'outlined'}
+                                 error={!!formState.preferredDnsServerField}
+                                 helperText={formState.preferredDnsServerField}
+                                 disabled={!!settings.isAutoDnsEnabled}
                                  value={settings.dnsServerGroup.preferredDnsServer}
                                  onChange={handlePreferredDnsServerChange}
                 />
             </Grid>
             <Grid item container justify={'flex-end'} alignItems={'center'}>
                 Alternative DNS Server:
-                <StyledTextField variant={'outlined'} disabled={settings.isAutoDnsEnabled}
+                <StyledTextField variant={'outlined'}
+                                 disabled={!!settings.isAutoDnsEnabled}
                                  value={settings.dnsServerGroup.alternativeDnsServer}
+                                 error={!!formState.alternativeDnsServerField}
+                                 helperText={formState.alternativeDnsServerField}
                                  onChange={handleAlternativeDnsServerChange}
                 />
             </Grid>

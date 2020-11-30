@@ -41,7 +41,6 @@ const WirelessSettings = () => {
                 <StyledSelects options={WIFI_NETWORKS}
                                disabled={!wirelessSettings.isWifiEnabled}
                                value={wirelessSettings.wirelessNetworkName}
-                               required
                                handleChange={handleWifiNetworkNameChange}/>
                 <IconButton component={'span'}>
                     <UpdateIcon/>
@@ -65,7 +64,7 @@ const WirelessSettings = () => {
                     className={wirelessSettings.isWirelessSecurityEnabled ? styles.Required : null}>Security Key:</span>
                 <StyledTextField
                     variant={'outlined'} disabled={!wirelessSettings.isWirelessSecurityEnabled}
-                    value={wirelessSettings.securityKey} required
+                    value={wirelessSettings.securityKey}
                     onChange={handleWifiSecurityKeyChange}/>
             </Grid>
         </Grid>
