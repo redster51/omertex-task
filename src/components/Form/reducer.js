@@ -171,7 +171,8 @@ export const formReducer = (state, {type, payload}) => {
                 ...state,
                 formState: {
                     ...state.formState,
-                    ethernetAlternativeDnsServerField: validateField('ethernetAlternativeDnsServerField', payload)
+                    ethernetAlternativeDnsServerField: state.ethernetSettings.preferredDnsServer !== ''
+                        && validateField('ethernetAlternativeDnsServerField', payload)
                 },
                 ethernetSettings: {
                     ...state.ethernetSettings,
@@ -343,7 +344,8 @@ export const formReducer = (state, {type, payload}) => {
             return {
                 ...state,
                 formState: {
-                    wirelessAlternativeDnsServerField: validateField('wirelessAlternativeDnsServerField', payload)
+                    wirelessAlternativeDnsServerField: state.wirelessSettings.alternativeDnsServer !== '' &&
+                        validateField('wirelessAlternativeDnsServerField', payload)
                 },
                 wirelessSettings: {
                     ...state.wirelessSettings,

@@ -4,7 +4,7 @@ import {
     DNS_SERVER_CONSTRAINTS,
     IP_ADDRESS_CONSTRAINTS,
     SUBNET_MASK_CONSTRAINTS
-} from "./constants";
+} from "./validationConstants";
 
 const FIELD_CONSTRAINTS_MAP = {
     ethernetIpAddressField: IP_ADDRESS_CONSTRAINTS,

@@ -13,14 +13,15 @@ import useFormValidation from "./hooks/useFormValidation";
 
 const Form = ({className}) => {
     const [state, dispatch] = useReducer(formReducer, initialState);
+    const {ethernetSettings, wirelessSettings} = state;
     const actions = useActions(dispatch);
-    const isValidForm =  useFormValidation(state.formState);
+    const isValidForm = useFormValidation(state.formState);
 
     const handleSubmit = (event) => {
         event.preventDefault();
         actions.validateForm();
         if (isValidForm) {
-            console.group('Data for backend:', state);
+            console.log('Data for backend:', {ethernetSettings, wirelessSettings});
         }
     }
 
@@ -50,7 +51,7 @@ const Form = ({className}) => {
                         <Grid item>
                             <StyledButton type="submit"
                                           variant={'contained'}
-                                          disabled={isValidForm}
+                                          disabled={!isValidForm}
                                           color={'primary'}>Save</StyledButton>
                         </Grid>
                         <Grid item>
